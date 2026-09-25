@@ -1,0 +1,28 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# VS Code (nếu có)
+.vscode/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Spotlight
+.Spotlight-V100
+
+# Trash
+.Trashes
+
+# Files that might appear on external disks
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.apdisk
