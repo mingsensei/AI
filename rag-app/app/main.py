@@ -3,6 +3,7 @@ from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import split_text
 from app.services.embedding_service import create_embeddings
 from app.services.vector_service import save_embeddings
+from app.services.vector_service import search_similar
 
 app = FastAPI()
 
@@ -99,3 +100,21 @@ def save_vector():
     return {
         "saved": count
     }
+
+@app.get("/search")
+def search():
+
+    question = "How does S3 work?"
+
+
+    question_vector = create_embeddings(
+        [question]
+    )[0]
+
+
+    results = search_similar(
+        question_vector
+    )
+
+
+    return results
