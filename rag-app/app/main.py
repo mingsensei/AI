@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import split_text
+from app.services.embedding_service import create_embeddings
 
 app = FastAPI()
 
@@ -36,3 +37,39 @@ def chunk_pdf():
          "total_chunks": len(chunks),
          "chunks": chunks[:3]
      }
+@app.get("/embedding-test")
+def embedding_test():
+
+    chunks = [
+        "Amazon EC2 is a virtual server",
+        "Amazon S3 is object storage"
+    ]
+
+    vectors = create_embeddings(
+        chunks
+    )
+
+    return {
+        "number_of_vectors": len(vectors),
+        "dimension": len(vectors[0])
+    }
+@app.get("/pdf-embedding")
+def pdf_embedding():
+
+    text = extract_text_from_pdf(
+        "uploads/test.pdf"
+    )
+
+    chunks = split_text(text)
+
+
+    vectors = create_embeddings(
+        chunks
+    )
+
+
+    return {
+        "chunks": len(chunks),
+        "vectors": len(vectors),
+        "dimension": len(vectors[0])
+    }
