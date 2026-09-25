@@ -121,46 +121,18 @@ def search(
 
     return results
 
+from app.services.rag_service import ask_rag
+
+
+
 @app.get("/chat")
 def chat(
-    question: str
+    question:str
 ):
 
-    # 1. Embed question
-
-    question_vector = create_embeddings(
-        [question]
-    )[0]
-
-
-    # 2. Retrieve
-
-    results = search_similar(
-        question_vector,
-        top_k=3
+    result = ask_rag(
+        question
     )
 
 
-    # 3. Get text
-
-    documents = results["documents"][0]
-
-
-    context = "\n\n".join(
-        documents
-    )
-
-
-    # 4. Generate
-
-    answer = generate_answer(
-        question,
-        context
-    )
-
-
-    return {
-        "question": question,
-        "answer": answer,
-        "sources": documents
-    }
+    return result

@@ -1,16 +1,38 @@
 import ollama
 
 
+
 def generate_answer(
     question,
-    context
+    context,
+    history
 ):
 
-    prompt = f"""
-Bạn là trợ lý AWS.
 
-Chỉ trả lời dựa trên thông tin được cung cấp.
+    messages = []
 
+
+    messages.append(
+        {
+            "role":"system",
+            "content":
+            """
+            Bạn là trợ lý AWS.
+            Trả lời dựa trên context.
+            """
+        }
+    )
+
+
+    messages.extend(
+        history
+    )
+
+
+    messages.append(
+        {
+            "role":"user",
+            "content":f"""
 Context:
 
 {context}
@@ -19,20 +41,14 @@ Context:
 Question:
 
 {question}
-
-
-Answer:
 """
+        }
+    )
 
 
     response = ollama.chat(
         model="qwen2.5:3b",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+        messages=messages
     )
 
 
