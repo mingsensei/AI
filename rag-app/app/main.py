@@ -68,8 +68,14 @@ def pdf_embedding():
     chunks = split_text(text)
 
 
+    texts = [
+        chunk["text"]
+        for chunk in chunks
+    ]
+
+
     vectors = create_embeddings(
-        chunks
+        texts
     )
 
 
@@ -89,8 +95,14 @@ def save_vector():
     chunks = split_text(text)
 
 
+    texts = [
+        chunk["text"]
+        for chunk in chunks
+    ]
+
+
     vectors = create_embeddings(
-        chunks
+        texts
     )
 
 

@@ -1,10 +1,10 @@
 import ollama
 
 
-
 def generate_answer(
     question,
     context,
+    sources,
     history
 ):
 
@@ -14,11 +14,12 @@ def generate_answer(
 
     messages.append(
         {
-            "role":"system",
-            "content":
-            """
+            "role": "system",
+            "content": """
             Bạn là trợ lý AWS.
             Trả lời dựa trên context.
+            Nếu không có thông tin trong context,
+            hãy nói không biết.
             """
         }
     )
@@ -31,16 +32,23 @@ def generate_answer(
 
     messages.append(
         {
-            "role":"user",
-            "content":f"""
+            "role": "user",
+            "content": f"""
+
 Context:
 
 {context}
 
 
+Sources:
+
+{sources}
+
+
 Question:
 
 {question}
+
 """
         }
     )

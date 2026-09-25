@@ -25,7 +25,7 @@ def ask_rag(question: str):
 
 
     documents = results["documents"][0]
-
+    sources = results["metadatas"][0]
 
     context = "\n\n".join(
         documents
@@ -35,6 +35,7 @@ def ask_rag(question: str):
     answer = generate_answer(
         question,
         context,
+        sources,
         history
     )
 
@@ -53,5 +54,6 @@ def ask_rag(question: str):
 
     return {
         "answer": answer,
-        "history": history
+        "history": history,
+        "sources": sources
     }

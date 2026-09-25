@@ -17,18 +17,29 @@ def save_embeddings(
     embeddings
 ):
 
-    ids = []
+    documents = [
+        chunk["text"]
+        for chunk in chunks
+    ]
 
-    for i in range(len(chunks)):
-        ids.append(
-            str(i)
-        )
+
+    metadatas = [
+        chunk["metadata"]
+        for chunk in chunks
+    ]
+
+
+    ids = [
+        str(i)
+        for i in range(len(chunks))
+    ]
 
 
     collection.add(
         ids=ids,
-        documents=chunks,
-        embeddings=embeddings.tolist()
+        documents=documents,
+        embeddings=embeddings.tolist(),
+        metadatas=metadatas
     )
 
 
