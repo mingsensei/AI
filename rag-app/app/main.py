@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from app.services.pdf_service import extract_text_from_pdf
 from app.services.chunk_service import split_text
 from app.services.embedding_service import create_embeddings
+from app.services.vector_service import save_embeddings
 
 app = FastAPI()
 
@@ -72,4 +73,29 @@ def pdf_embedding():
         "chunks": len(chunks),
         "vectors": len(vectors),
         "dimension": len(vectors[0])
+    }
+@app.get("/save-vector")
+def save_vector():
+
+    text = extract_text_from_pdf(
+        "uploads/test.pdf"
+    )
+
+
+    chunks = split_text(text)
+
+
+    vectors = create_embeddings(
+        chunks
+    )
+
+
+    count = save_embeddings(
+        chunks,
+        vectors
+    )
+
+
+    return {
+        "saved": count
     }
