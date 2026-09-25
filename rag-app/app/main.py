@@ -4,6 +4,9 @@ from app.services.chunk_service import split_text
 from app.services.embedding_service import create_embeddings
 from app.services.vector_service import save_embeddings
 from app.services.vector_service import search_similar
+from app.services.llm_service import generate_answer
+
+from fastapi import Query
 
 app = FastAPI()
 
@@ -102,10 +105,9 @@ def save_vector():
     }
 
 @app.get("/search")
-def search():
-
-    question = "How does S3 work?"
-
+def search(
+    question: str = Query(...)
+):
 
     question_vector = create_embeddings(
         [question]
@@ -118,3 +120,47 @@ def search():
 
 
     return results
+
+@app.get("/chat")
+def chat(
+    question: str
+):
+
+    # 1. Embed question
+
+    question_vector = create_embeddings(
+        [question]
+    )[0]
+
+
+    # 2. Retrieve
+
+    results = search_similar(
+        question_vector,
+        top_k=3
+    )
+
+
+    # 3. Get text
+
+    documents = results["documents"][0]
+
+
+    context = "\n\n".join(
+        documents
+    )
+
+
+    # 4. Generate
+
+    answer = generate_answer(
+        question,
+        context
+    )
+
+
+    return {
+        "question": question,
+        "answer": answer,
+        "sources": documents
+    }
